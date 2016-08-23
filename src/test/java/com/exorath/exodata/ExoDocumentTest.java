@@ -16,7 +16,7 @@
 
 package com.exorath.exodata;
 
-import com.exorath.exodata.impl.api.ExoDocument;
+import com.exorath.exodata.api.ExoDocument;
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -85,14 +85,14 @@ public class ExoDocumentTest {
 
     @Test
     public void fetchEqualsDocumentTest() {
-        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "abc").append("value2", "def"));
+        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "impl").append("value2", "def"));
         collection.insertOne(doc);
         assertEquals(doc, document.fetch().toBlocking().first());
     }
 
     @Test
     public void fetchDoesNotEqualsDocumentTest() {
-        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "abc").append("value2", "def"));
+        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "impl").append("value2", "def"));
         assertNotEquals(doc, document.fetch().toBlocking().first());
     }
 
@@ -108,7 +108,7 @@ public class ExoDocumentTest {
 
     @Test(timeout = 1000)
     public void getCachedOrFetchReturnsFetchTest() {
-        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "abc").append("value2", "def"));
+        Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "impl").append("value2", "def"));
         collection.insertOne(doc);
         assertTrue(document.getCachedOrFetch().toBlocking().first().equals(doc));
     }

@@ -14,21 +14,34 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.api;
+package com.exorath.exodata.api;
 
-import com.exorath.exodata.impl.impl.IExoDatabase;
-import com.mongodb.client.MongoDatabase;
+import com.exorath.exodata.impl.IDataAPI;
+import com.mongodb.MongoClient;
 import rx.Observable;
 
 /**
  * Created by toonsev on 8/22/2016.
  */
-public interface ExoDatabase {
+public interface DataAPI {
 
-    Observable<ExoCollection> getCollection(String name);
-    MongoDatabase getMongoDatabase();
+    Observable<ExoDatabase> getDatabase(String name);
 
-    static ExoDatabase create(MongoDatabase database){
-        return new IExoDatabase(database);
+    MongoClient getMongoClient();
+
+    static DataAPI create() {
+        return new IDataAPI();
+    }
+
+    static DataAPI create(String host) {
+        return new IDataAPI(host);
+    }
+
+    static DataAPI create(String host, int port) {
+        return new IDataAPI(host, port);
+    }
+
+    static DataAPI create(MongoClient client) {
+        return new IDataAPI(client);
     }
 }

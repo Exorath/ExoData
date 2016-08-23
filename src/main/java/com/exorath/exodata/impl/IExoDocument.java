@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.impl;
+package com.exorath.exodata.impl;
 
-import com.exorath.exodata.impl.api.ExoDocument;
+import com.exorath.exodata.api.ExoDocument;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.*;
 import com.mongodb.client.result.UpdateResult;
@@ -30,7 +30,7 @@ import static com.mongodb.client.model.Filters.and;
 /**
  * Created by toonsev on 8/19/2016.
  */
-public class IExoDocument implements ExoDocument{
+public class IExoDocument implements ExoDocument {
     private Object id;
     private Document document;
 

@@ -14,30 +14,21 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.impl;
+package com.exorath.exodata.api;
 
-import com.exorath.exodata.impl.api.ExoCollection;
-import com.exorath.exodata.impl.api.ExoDatabase;
+import com.exorath.exodata.impl.IExoDatabase;
 import com.mongodb.client.MongoDatabase;
 import rx.Observable;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by toonsev on 8/22/2016.
  */
-public class IExoDatabase implements ExoDatabase {
-    private MongoDatabase database;
-    public IExoDatabase(MongoDatabase database){
-        this.database = database;
-    }
-    @Override
-    public Observable<ExoCollection> getCollection(String name) {
-        return Observable.create(s -> s.onNext(ExoCollection.create(database.getCollection(name))))
-                .subscribeOn(Schedulers.io()).cast(ExoCollection.class);
-    }
+public interface ExoDatabase {
 
-    @Override
-    public MongoDatabase getMongoDatabase() {
-        return database;
+    Observable<ExoCollection> getCollection(String name);
+    MongoDatabase getMongoDatabase();
+
+    static ExoDatabase create(MongoDatabase database){
+        return new IExoDatabase(database);
     }
 }

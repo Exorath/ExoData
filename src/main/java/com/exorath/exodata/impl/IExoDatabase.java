@@ -14,33 +14,30 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.api;
+package com.exorath.exodata.impl;
 
-import com.exorath.exodata.impl.impl.IDataAPI;
-import com.mongodb.MongoClient;
+import com.exorath.exodata.api.ExoDatabase;
+import com.exorath.exodata.api.ExoCollection;
+import com.mongodb.client.MongoDatabase;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by toonsev on 8/22/2016.
  */
-public interface DataAPI {
-    Observable<ExoDatabase> getDatabase(String name);
-
-    MongoClient getMongoClient();
-
-    static DataAPI create() {
-        return new IDataAPI();
+public class IExoDatabase implements ExoDatabase {
+    private MongoDatabase database;
+    public IExoDatabase(MongoDatabase database){
+        this.database = database;
+    }
+    @Override
+    public Observable<ExoCollection> getCollection(String name) {
+        return Observable.create(s -> s.onNext(ExoCollection.create(database.getCollection(name))))
+                .subscribeOn(Schedulers.io()).cast(ExoCollection.class);
     }
 
-    static DataAPI create(String host) {
-        return new IDataAPI(host);
-    }
-
-    static DataAPI create(String host, int port) {
-        return new IDataAPI(host, port);
-    }
-
-    static DataAPI create(MongoClient client) {
-        return new IDataAPI(client);
+    @Override
+    public MongoDatabase getMongoDatabase() {
+        return database;
     }
 }

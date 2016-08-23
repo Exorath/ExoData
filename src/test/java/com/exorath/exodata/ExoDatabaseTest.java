@@ -16,7 +16,7 @@
 
 package com.exorath.exodata;
 
-import com.exorath.exodata.impl.api.ExoDatabase;
+import com.exorath.exodata.api.ExoDatabase;
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import org.junit.Before;

@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.impl;
+package com.exorath.exodata.impl;
 
-import com.exorath.exodata.impl.api.ExoCollection;
-import com.exorath.exodata.impl.api.ExoDocument;
+import com.exorath.exodata.api.ExoCollection;
+import com.exorath.exodata.api.ExoDocument;
 import com.mongodb.client.MongoCollection;
 import org.bson.conversions.Bson;
 import rx.Observable;
@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by toonsev on 8/22/2016.
  */
-public class IExoCollection implements ExoCollection{
+public class IExoCollection implements ExoCollection {
     private MongoCollection collection;
 
     public IExoCollection(MongoCollection collection){

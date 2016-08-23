@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.api;
+package com.exorath.exodata.api;
 
-import com.exorath.exodata.impl.impl.IExoDocument;
+import com.exorath.exodata.impl.IExoDocument;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;

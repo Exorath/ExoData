@@ -16,14 +16,12 @@
 
 package com.exorath.exodata;
 
-import com.exorath.exodata.impl.api.ExoCollection;
-import com.exorath.exodata.impl.api.ExoDatabase;
+import com.exorath.exodata.api.ExoCollection;
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
-import rx.Observable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

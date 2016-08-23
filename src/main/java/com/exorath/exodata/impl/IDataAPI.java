@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package com.exorath.exodata.impl.impl;
+package com.exorath.exodata.impl;
 
-import com.exorath.exodata.impl.api.DataAPI;
-import com.exorath.exodata.impl.api.ExoDatabase;
+import com.exorath.exodata.api.DataAPI;
+import com.exorath.exodata.api.ExoDatabase;
 import com.mongodb.MongoClient;
 import rx.Observable;
 import rx.schedulers.Schedulers;

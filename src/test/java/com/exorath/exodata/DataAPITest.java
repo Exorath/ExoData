@@ -16,8 +16,8 @@
 
 package com.exorath.exodata;
 
-import com.exorath.exodata.impl.api.DataAPI;
-import com.exorath.exodata.impl.api.ExoDatabase;
+import com.exorath.exodata.api.DataAPI;
+import com.exorath.exodata.api.ExoDatabase;
 import com.github.fakemongo.Fongo;
 import com.mongodb.MongoClient;
 import org.junit.Before;
@@ -67,7 +67,7 @@ public class DataAPITest {
     @Test
     public void getDatabaseCreatesDatabaseAfterGetCollectionIsCalledOnDatabaseTest(){
         ExoDatabase database = dataAPI.getDatabase(DB_NAME).toBlocking().first();
-        database.getCollection("abc").toBlocking().first();
+        database.getCollection("impl").toBlocking().first();
         assertEquals(1,client.getUsedDatabases().stream().filter(db -> db.getName().equals("testdb")).count());
     }
 
