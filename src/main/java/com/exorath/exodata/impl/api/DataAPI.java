@@ -26,6 +26,7 @@ import rx.Observable;
 public interface DataAPI {
     Observable<ExoDatabase> getDatabase(String name);
 
+    MongoClient getMongoClient();
 
     static DataAPI create() {
         return new IDataAPI();

@@ -70,4 +70,15 @@ public class DataAPITest {
         database.getCollection("abc").toBlocking().first();
         assertEquals(1,client.getUsedDatabases().stream().filter(db -> db.getName().equals("testdb")).count());
     }
+
+    @Test
+    public void getMongoClientNotNullTest(){
+        assertNotNull(dataAPI.getMongoClient());
+    }
+
+    @Test
+    public void getMongoClientEqualsClientTest(){
+        assertEquals(client, dataAPI.getMongoClient());
+        assertEquals(client, dataAPI.getMongoClient());
+    }
 }

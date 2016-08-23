@@ -48,4 +48,9 @@ public class IDataAPI implements DataAPI {
             subscriber.onCompleted();
         }).subscribeOn(Schedulers.io()).cast(ExoDatabase.class);
     }
+
+    @Override
+    public MongoClient getMongoClient() {
+        return client;
+    }
 }
