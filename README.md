@@ -45,3 +45,7 @@ document.decrementIfSufficient("key", 123).subscribe(updateResult -> {
     System.out.println("Failed to decrement key, the value was not large enough");
 });
 ```
+##TODO
+* Observable for external changes (for example if your application's website has updated a field)
+* More tests
+* Example projects
