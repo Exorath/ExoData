@@ -30,6 +30,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.mongodb.client.model.Projections.exclude;
+import static com.mongodb.client.model.Projections.fields;
+import static com.mongodb.client.model.Projections.include;
 import static org.junit.Assert.*;
 
 /**
@@ -54,22 +57,22 @@ public class ExoDocumentTest {
         document = ExoDocument.create(collection, id.toString());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void getCollectionNotNullTest() {
         assertNotNull(document.getCollection());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void getCollectionNamespaceEqualsCollectionNamespaceTest() {
         assertEquals(collection.getNamespace(), document.getCollection().getNamespace());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void fetchObservableNotNullTest() {
         assertNotNull(document.fetch());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void fetchNotNullTest() {
         assertNotNull(document.fetch().toBlocking().first());
     }
@@ -83,20 +86,48 @@ public class ExoDocumentTest {
         assertTrue(called.get());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void fetchEqualsDocumentTest() {
         Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "impl").append("value2", "def"));
         collection.insertOne(doc);
         assertEquals(doc, document.fetch().toBlocking().first());
     }
 
-    @Test
+    @Test(timeout = 1000)
     public void fetchDoesNotEqualsDocumentTest() {
         Document doc = new Document("_id", id.toString()).append("testkey", "testvalue").append("testnested", new Document("value1", "impl").append("value2", "def"));
         assertNotEquals(doc, document.fetch().toBlocking().first());
     }
 
-    @Test
+    @Test(timeout = 1000)
+    public void fetchWithProjectionObservableNotNullTest() {
+       assertNotNull(document.fetch());
+    }
+
+    @Test(timeout = 1000)
+    public void fetchWithProjectionNotNullTest() {
+        assertNotNull(document.fetch().toBlocking().first());
+    }
+
+    @Test(timeout = 1000)
+    public void fetchWithProjectionIncludesFieldContainsTest() {
+        document.set("key1", "value1").toBlocking().subscribe();
+        assertTrue(document.fetch(include("key1")).toBlocking().first().containsKey("key1"));
+    }
+
+    @Test(timeout = 1000)
+    public void fetchWithProjectionExcludesFieldDoesNotContainsTest() {
+        document.set("key1", "value1").toBlocking().subscribe();
+        assertFalse(document.fetch(exclude("key1")).toBlocking().first().containsKey("key1"));
+    }
+    @Test(timeout = 1000)
+    public void fetchWithProjectionIncludeFieldDoesNotContainsTest() {
+        document.set("key1", "value1").toBlocking().subscribe();
+        document.set("key2", "value2").toBlocking().subscribe();
+        assertFalse(document.fetch(include("key1")).toBlocking().first().containsKey("key2"));
+    }
+
+    @Test(timeout = 1000)
     public void getCachedOrFetchObservableNotNullTest() {
         assertNotNull(document.getCachedOrFetch());
     }
@@ -685,6 +716,7 @@ public class ExoDocumentTest {
         document.remove("array").toBlocking().subscribe();
         assertFalse(document.fetch().toBlocking().first().containsKey("array"));
     }
+
 
     //TODO: Update tests (Not really necessary as all above tests use update indirectly)
 }

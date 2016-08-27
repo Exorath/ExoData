@@ -64,9 +64,25 @@ public interface ExoDocument {
     Observable<Document> fetch();
 
     /**
+     * Fetches the latest version of the document from the database (note that even this may already be outdated when it arrives back).
+     * This method differs from {@link #fetch()} in the projection parameter. This allows you to specify which fields to include and exclude in the response document.
+     * <p>
+     * <p>
+     * The fetched document will also be cached for the {@link #getCachedOrFetch()} method.
+     * <p>
+     * If the document does not exist yet, this operation will create it atomically (with the findAndModify MongoDB operator).
+     *
+     * @param projection the fields to include in the returned document
+     * @return an observable that will emit the document and complete, or throw an error
+     * @see <a http://mongodb.github.io/mongo-java-driver/3.0/builders/projections/">http://mongodb.github.io/mongo-java-driver/3.0/builders/projections/</a>
+     */
+    Observable<Document> fetch(Bson projection);
+
+
+    /**
      * The set operator replaces the value of a field with the specified value. If the field does not exist, $set will add a new field with the specified value.
      * If you specify a dotted path for a non-existent field, $set will create the embedded documents as needed to fulfill the dotted path to the field.
-     *
+     * <p>
      * This operation will create the document in the database if it does not exist yet.
      *
      * @param key   field identifier
@@ -79,7 +95,7 @@ public interface ExoDocument {
     /**
      * The inc operator increments a field by a specified value.
      * If the field does not exist, inc creates the field and sets the field to the specified value.
-     *
+     * <p>
      * This operation will create the document in the database if it does not exist yet.
      *
      * @param key    field identifier
@@ -96,7 +112,7 @@ public interface ExoDocument {
      * You can check whether or not this was successful by checking if the {@link UpdateResult#getModifiedCount()} is larger then zero.
      * <p>
      * Note that amount can be positive (decrements) and negative (increments), though I do not see why you would want to increment if there is enough balance ;).
-     *
+     * <p>
      * This operation will NOT create the document in the database if it does not exist yet.
      *
      * @param key    field identifier
@@ -110,8 +126,9 @@ public interface ExoDocument {
      * You can check whether or not this was successful by checking if the {@link UpdateResult#getModifiedCount()} is larger then zero.
      * <p>
      * Note that amount can be positive (decrements) and negative (increments), though I do not see why you would want to increment if there is enough balance ;).
-     *
+     * <p>
      * This operation will NOT create the document in the database if it does not exist yet.
+     *
      * @param key    field identifier
      * @param amount amount to decrement if sufficient
      * @return an observable that will emit the UpdateResult and complete, or throw an error. Check {@link UpdateResult#getModifiedCount()} to verify the decrement was successful.
@@ -123,7 +140,7 @@ public interface ExoDocument {
      * You can check whether or not this was successful by checking if the {@link UpdateResult#getModifiedCount()} is larger then zero.
      * <p>
      * Note that amount can be positive (decrements) and negative (increments), though I do not see why you would want to increment if there is enough balance ;).
-     *
+     * <p>
      * This operation will NOT create the document in the database if it does not exist yet.
      *
      * @param key    field identifier
@@ -136,7 +153,7 @@ public interface ExoDocument {
      * The push operator appends a specified value to an array.
      * If the field is absent in the document to update, push adds the array field with the value as its element.
      * If the value is an array, push appends the whole array as a single element.
-     *
+     * <p>
      * This operation will create the document in the database if it does not exist yet.
      *
      * @param key   field identifier
@@ -149,8 +166,9 @@ public interface ExoDocument {
     /**
      * The pop operator removes the first or last element of an array.
      * If the pop operator removes the last item in the field, the field will then hold an empty array.
-     *
+     * <p>
      * This operation will NOT create the document in the database if it does not exist yet.
+     *
      * @param key   field key of the array
      * @param first if true this operation pops the first element, if false it pops the last element
      * @return an observable that will emit the UpdateResult and complete, or throw an error.
@@ -163,7 +181,7 @@ public interface ExoDocument {
      * You can check the {@link UpdateResult#getModifiedCount()} to see whether or not this element was removed (if the count == 0 it means the element was already removed).
      * To specify a field in an embedded (aka nested) document or in an array, use dot notation.
      * If the field does not exist, then remove does nothing (i.e. no operation).
-     *
+     * <p>
      * This operation will NOT create the document in the database if it does not exist yet.
      *
      * @param key field identifier

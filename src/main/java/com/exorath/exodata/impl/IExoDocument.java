@@ -60,14 +60,20 @@ public class IExoDocument implements ExoDocument {
 
     @Override
     public Observable<Document> fetch() {
+        return fetch(null);
+    }
+
+    @Override
+    public Observable<Document> fetch(Bson projection) {
+
         return Observable.create((subscriber -> {
-            Document fetched = (Document) collection.findOneAndUpdate(getIdQuery(), Updates.setOnInsert("_id", getId().toString()),
-                    new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER));
-            document = fetched;
-            subscriber.onNext(fetched);
+            FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER).projection(projection);
+            document = (Document) collection.findOneAndUpdate(getIdQuery(), Updates.setOnInsert("_id", getId().toString()), options);
+            subscriber.onNext(document);
             subscriber.onCompleted();
         })).subscribeOn(Schedulers.io()).cast(Document.class);
     }
+
     @Override
     public Observable<UpdateResult> pop(String key, boolean first) {
         return first ? update(Updates.popFirst(key), false) : update(Updates.popLast(key), false);
