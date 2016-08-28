@@ -67,6 +67,7 @@ public interface ExoDocument {
      * Fetches the latest version of the document from the database (note that even this may already be outdated when it arrives back).
      * This method differs from {@link #fetch()} in the projection parameter. This allows you to specify which fields to include and exclude in the response document.
      * <p>
+     * There may be a case that this the observable does not emit a document (Maybe if you do fetch(slice("nonexistendkey", 1)). Then this operation will simply complete. This needs testing!
      * <p>
      * The fetched document will also be cached for the {@link #getCachedOrFetch()} method.
      * <p>

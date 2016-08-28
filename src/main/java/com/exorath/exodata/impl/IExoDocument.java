@@ -69,7 +69,8 @@ public class IExoDocument implements ExoDocument {
         return Observable.create((subscriber -> {
             FindOneAndUpdateOptions options = new FindOneAndUpdateOptions().upsert(true).returnDocument(ReturnDocument.AFTER).projection(projection);
             document = (Document) collection.findOneAndUpdate(getIdQuery(), Updates.setOnInsert("_id", getId().toString()), options);
-            subscriber.onNext(document);
+            if (document != null)
+                subscriber.onNext(document);
             subscriber.onCompleted();
         })).subscribeOn(Schedulers.io()).cast(Document.class);
     }
@@ -78,10 +79,12 @@ public class IExoDocument implements ExoDocument {
     public Observable<UpdateResult> pop(String key, boolean first) {
         return first ? update(Updates.popFirst(key), false) : update(Updates.popLast(key), false);
     }
+
     @Override
     public Observable<UpdateResult> set(String key, Object value) {
         return update(Updates.set(key, value), true);
     }
+
     @Override
     public Observable<UpdateResult> inc(String key, Number amount) {
         return update(Updates.inc(key, amount), true);

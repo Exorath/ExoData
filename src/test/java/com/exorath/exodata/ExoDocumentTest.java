@@ -30,9 +30,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.mongodb.client.model.Projections.exclude;
-import static com.mongodb.client.model.Projections.fields;
-import static com.mongodb.client.model.Projections.include;
+import static com.mongodb.client.model.Projections.*;
 import static org.junit.Assert.*;
 
 /**
@@ -108,7 +106,7 @@ public class ExoDocumentTest {
     public void fetchWithProjectionNotNullTest() {
         assertNotNull(document.fetch().toBlocking().first());
     }
-
+    
     @Test(timeout = 1000)
     public void fetchWithProjectionIncludesFieldContainsTest() {
         document.set("key1", "value1").toBlocking().subscribe();
@@ -125,6 +123,11 @@ public class ExoDocumentTest {
         document.set("key1", "value1").toBlocking().subscribe();
         document.set("key2", "value2").toBlocking().subscribe();
         assertFalse(document.fetch(include("key1")).toBlocking().first().containsKey("key2"));
+    }
+    @Test(timeout = 1000)
+    public void fetchWithNullProjectionFieldContainsKeyTest() {
+        document.set("key1", "value1").toBlocking().subscribe();
+        assertTrue(document.fetch(null).toBlocking().first().containsKey("key1"));
     }
 
     @Test(timeout = 1000)
